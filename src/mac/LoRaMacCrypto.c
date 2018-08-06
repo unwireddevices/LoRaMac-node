@@ -28,7 +28,7 @@
  *
  * \author    Daniel Jaeckle ( STACKFORCE )
  */
-#include "utilities.h"
+#include "boards/utilities.h"
 
 #include "aes.h"
 #include "cmac.h"

@@ -28,7 +28,7 @@
  *
  * \author    Daniel Jaeckle ( STACKFORCE )
 */
-#include "utilities.h"
+#include "boards/utilities.h"
 
 #include "RegionCommon.h"
 #include "RegionIN865.h"

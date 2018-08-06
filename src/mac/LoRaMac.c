@@ -28,7 +28,7 @@
  *
  * \author    Daniel Jaeckle ( STACKFORCE )
  */
-#include "utilities.h"
+#include "boards/utilities.h"
 #include "LoRaMac.h"
 #include "LoRaMacCrypto.h"
 #include "LoRaMacTest.h"
@@ -321,11 +321,6 @@ static LoRaMacPrimitives_t *LoRaMacPrimitives;
  * LoRaMac upper layer callback functions
  */
 static LoRaMacCallback_t *LoRaMacCallbacks;
-
-/*!
- * Radio events function pointer
- */
-static RadioEvents_t RadioEvents;
 
 /*!
  * LoRaMac duty cycle delayed Tx timer
@@ -732,8 +727,7 @@ static void PrepareRxDoneAbort( void )
     LoRaMacFlags.Bits.MacDone = 1;
 
     // Trig OnMacCheckTimerEvent call as soon as possible
-    TimerSetValue( &MacStateCheckTimer, 1 );
-    TimerStart( &MacStateCheckTimer );
+    OnMacStateCheckTimerEvent();
 }
 
 static void OnRadioRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
@@ -1129,13 +1123,12 @@ static void OnRadioRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t
     CheckToDisableAckTimeout( NodeAckRequested, LoRaMacDeviceClass, McpsConfirm.AckReceived,
                                 AckTimeoutRetriesCounter, AckTimeoutRetries );
 
-    if( AckTimeoutTimer.IsRunning == false )
+    if( AckTimeoutTimer.running == false )
     {// Procedure is completed when the AckTimeoutTimer is not running anymore
         LoRaMacFlags.Bits.MacDone = 1;
 
         // Trig OnMacCheckTimerEvent call as soon as possible
-        TimerSetValue( &MacStateCheckTimer, 1 );
-        TimerStart( &MacStateCheckTimer );
+        OnMacStateCheckTimerEvent();
     }
 }
 
@@ -2384,7 +2377,7 @@ LoRaMacStatus_t SetTxContinuousWave1( uint16_t timeout, uint32_t frequency, uint
     return LORAMAC_STATUS_OK;
 }
 
-LoRaMacStatus_t LoRaMacInitialization( LoRaMacPrimitives_t *primitives, LoRaMacCallback_t *callbacks, LoRaMacRegion_t region )
+LoRaMacStatus_t LoRaMacInitialization( RadioEvents_t *radio_events, LoRaMacPrimitives_t *primitives, LoRaMacCallback_t *callbacks, LoRaMacRegion_t region )
 {
     GetPhyParams_t getPhy;
     PhyParam_t phyParam;
@@ -2514,12 +2507,12 @@ LoRaMacStatus_t LoRaMacInitialization( LoRaMacPrimitives_t *primitives, LoRaMacC
     LoRaMacInitializationTime = TimerGetCurrentTime( );
 
     // Initialize Radio driver
-    RadioEvents.TxDone = OnRadioTxDone;
-    RadioEvents.RxDone = OnRadioRxDone;
-    RadioEvents.RxError = OnRadioRxError;
-    RadioEvents.TxTimeout = OnRadioTxTimeout;
-    RadioEvents.RxTimeout = OnRadioRxTimeout;
-    Radio.Init( &RadioEvents );
+    radio_events->TxDone = OnRadioTxDone;
+    radio_events->RxDone = OnRadioRxDone;
+    radio_events->RxError = OnRadioRxError;
+    radio_events->TxTimeout = OnRadioTxTimeout;
+    radio_events->RxTimeout = OnRadioRxTimeout;
+    Radio.Init( radio_events );
 
     // Random seed initialization
     srand1( Radio.Random( ) );

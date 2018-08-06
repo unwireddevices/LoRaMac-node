@@ -54,7 +54,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "timer.h"
+#include "semtech-loramac/timer.h"
 
 /*!
  * Macro to compute bit of a channel index.

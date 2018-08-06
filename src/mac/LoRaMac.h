@@ -102,8 +102,8 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "timer.h"
-#include "radio.h"
+#include "semtech-loramac/timer.h"
+#include "radio/radio.h"
 
 /*!
  * Check the Mac layer state every MAC_STATE_CHECK_TIMEOUT in ms
@@ -1822,7 +1822,7 @@ static const uint8_t LoRaMacMaxEirpTable[] = { 8, 10, 12, 13, 14, 16, 18, 20, 21
  *          \ref LORAMAC_STATUS_PARAMETER_INVALID,
  *          \ref LORAMAC_STATUS_REGION_NOT_SUPPORTED.
  */
-LoRaMacStatus_t LoRaMacInitialization( LoRaMacPrimitives_t *primitives, LoRaMacCallback_t *callbacks, LoRaMacRegion_t region );
+LoRaMacStatus_t LoRaMacInitialization( RadioEvents_t *RadioEvents, LoRaMacPrimitives_t *primitives, LoRaMacCallback_t *callbacks, LoRaMacRegion_t region );
 
 /*!
  * \brief   Queries the LoRaMAC if it is possible to send the next frame with
