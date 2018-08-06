@@ -14,6 +14,8 @@
     |___/ |_/_/ \_\___|_|\_\_| \___/|_|_\\___|___|
     embedded.connectivity.solutions===============
 
+## NB: this code was adapted to be included in RIOT OS release 2018.07, Unwired Devices fork
+    
 ## Introduction
 
 The aim of this project is to show an example of the endpoint LoRaWAN stack implementation.
