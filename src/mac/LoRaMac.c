@@ -1165,11 +1165,13 @@ static void OnRadioRxError( void )
 
         if( LoRaMacDeviceClass != CLASS_C )
         {
+            /*
             if( TimerGetElapsedTime( AggregatedLastTxDoneTime ) >= RxWindow2Delay )
             {
                 TimerStop( &RxWindowTimer2 );
                 LoRaMacFlags.Bits.MacDone = 1;
             }
+            */
         }
     }
     else
@@ -1209,11 +1211,13 @@ static void OnRadioRxTimeout( void )
 
         if( LoRaMacDeviceClass != CLASS_C )
         {
+            /*
             if( TimerGetElapsedTime( AggregatedLastTxDoneTime ) >= RxWindow2Delay )
             {
                 TimerStop( &RxWindowTimer2 );
                 LoRaMacFlags.Bits.MacDone = 1;
             }
+            */
         }
     }
     else
